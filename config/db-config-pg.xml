@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- POSTGRESQL -->
+    <bean id="application" primary="true" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+        <property name="jdbcUrl" value="jdbc:postgresql://localhost:3454/scuserapp" />
+        <property name="maximumPoolSize" value="10" />
+        <property name="maxLifetime" value="1800000" />
+        <property name="idleTimeout" value="600000" />
+        <property name="connectionTimeout" value="60000" />
+        <property name="dataSourceProperties">
+            <props>
+                <prop key="user">scuserapp</prop>
+                <prop key="password">scuserapppw</prop>
+                <prop key="defaultAutoCommit">false</prop>
+            </props>
+        </property>
+    </bean>
+</beans>

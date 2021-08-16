@@ -1,0 +1,84 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$SpringBootGradlePluginVersion")
+        classpath 'com.github.jengelman.gradle.plugins:shadow:6.1.0'
+    }
+}
+
+apply plugin: 'java'
+//apply plugin: 'application'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+group 'com.monoplus.mcd'
+version '1.0-SNAPSHOT'
+
+//bootJar {
+//    manifest {
+//        // Changes the Launcher of the jar file to load external Jar files
+//        // using the parameter [loader.path]
+//        attributes 'Main-Class': 'com.monoplus.mcd.Sample2FAEmail'
+//    }
+//}
+//
+//jar {
+//    manifest {
+//        attributes(
+//                'Main-Class': 'com.monoplus.mcd.Sample2FAEmail'
+//        )
+//    }
+//    from {
+//        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+//    }
+//}
+
+task customFatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'com.monoplus.mcd.Sample2FAEmail'
+    }
+    baseName = 'all-in-one-jar'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+springBoot {
+    // Creates [build-info.properties] under BOOT-INF\classes\META-INF directory
+    buildInfo()
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation fileTree(dir: 'lib', include: '*.jar')
+    // Spring boot
+    implementation "org.springframework.boot:spring-boot-starter:$SpringBootVersion"
+    implementation "org.springframework.boot:spring-boot-starter-web:$SpringBootVersion"
+    implementation "org.springframework.boot:spring-boot-starter-security:$SpringBootVersion"
+
+    // Spring Data JPA with Hibernate
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa:$SpringBootVersion"
+    // JDBC
+    implementation "org.springframework.boot:spring-boot-starter-jdbc:$SpringBootVersion"
+    // Mail
+    implementation "org.springframework.boot:spring-boot-starter-mail:$SpringBootVersion"
+    // JavaXBException
+    implementation "jakarta.xml.bind:jakarta.xml.bind-api:2.3.2"
+    implementation "org.glassfish.jaxb:jaxb-runtime:2.3.2"
+    //
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.5.3'
+
+    // Test dependencies
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
+}
+
+test {
+    useJUnitPlatform()
+}
